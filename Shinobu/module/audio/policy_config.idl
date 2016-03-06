@@ -1,0 +1,137 @@
+import "audioclient.idl";
+import "mmdeviceapi.idl";
+
+[
+  uuid(F8679F50-850A-41CF-9C72-430F290290C8)
+]
+interface IPolicyConfig : IUnknown {
+
+  HRESULT GetMixFormat(
+      [in] LPCWSTR pwstrDeviceId,
+      [out] WAVEFORMATEX** pFormat);
+
+  HRESULT GetDeviceFormat(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] BOOL bDefault,
+      [out] WAVEFORMATEX** pFormat);
+
+  HRESULT ResetDeviceFormat(
+      [in] LPCWSTR pwstrDeviceId);
+
+  HRESULT SetDeviceFormat(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] WAVEFORMATEX* pEndpointFormat,
+      [in] WAVEFORMATEX* pMixFormat);
+
+  HRESULT GetProcessingPeriod(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] BOOL bDefault,
+      [out] REFERENCE_TIME* hnsDefaultDevicePeriod,
+      [out] REFERENCE_TIME* hnsMinimumDevicePeriod);
+
+  HRESULT SetProcessingPeriod(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] REFERENCE_TIME* hnsDevicePeriod);
+
+  HRESULT GetShareMode(
+      [in] LPCWSTR pwstrDeviceId,
+      [out] AUDCLNT_SHAREMODE* pMode);
+
+  HRESULT SetShareMode(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] AUDCLNT_SHAREMODE* pMode);
+
+  HRESULT GetPropertyValue(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] PROPERTYKEY* key,
+      [out] PROPVARIANT* pValue);
+
+  HRESULT SetPropertyValue(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] PROPERTYKEY* key,
+      [in] PROPVARIANT* pValue);
+
+  HRESULT SetDefaultEndpoint(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] ERole role);
+
+  HRESULT SetEndpointVisibility(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] BOOL bVisible);
+};
+
+[
+  uuid(568B9108-44BF-40B4-9006-86AFE5B5A620)
+]
+interface IPolicyConfigVista : IUnknown {
+
+  HRESULT GetMixFormat(
+      [in] LPCWSTR pwstrDeviceId,
+      [out] WAVEFORMATEX** pFormat);
+
+  HRESULT GetDeviceFormat(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] BOOL bDefault,
+      [out] WAVEFORMATEX** pFormat);
+
+  HRESULT SetDeviceFormat(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] WAVEFORMATEX* pEndpointFormat,
+      [in] WAVEFORMATEX* pMixFormat);
+
+  HRESULT GetProcessingPeriod(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] BOOL bDefault,
+      [out] REFERENCE_TIME* hnsDefaultDevicePeriod,
+      [out] REFERENCE_TIME* hnsMinimumDevicePeriod);
+
+  HRESULT SetProcessingPeriod(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] REFERENCE_TIME* hnsDevicePeriod);
+
+  HRESULT GetShareMode(
+      [in] LPCWSTR pwstrDeviceId,
+      [out] AUDCLNT_SHAREMODE* pMode);
+
+  HRESULT SetShareMode(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] AUDCLNT_SHAREMODE* pMode);
+
+  HRESULT GetPropertyValue(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] PROPERTYKEY* key,
+      [out] PROPVARIANT* pValue);
+
+  HRESULT SetPropertyValue(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] PROPERTYKEY* key,
+      [in] PROPVARIANT* pValue);
+
+  HRESULT SetDefaultEndpoint(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] ERole role);
+
+  HRESULT SetEndpointVisibility(
+      [in] LPCWSTR pwstrDeviceId,
+      [in] BOOL bVisible);
+};
+
+[
+  uuid(00000000-0000-0000-0000-000000000000)
+]
+library AudioSes {
+
+  [
+    uuid(870AF99C-171D-4F9E-AF0D-E63DF40C2BC9)
+  ]
+  coclass CPolicyConfigClient {
+    [default] interface IPolicyConfig;
+  }
+
+  [
+    uuid(294935CE-F637-4E7C-A41B-AB255460B862)
+  ]
+  coclass CPolicyConfigVistaClient {
+    [default] interface IPolicyConfigVista;
+  }
+};
