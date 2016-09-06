@@ -2,6 +2,8 @@
 
 #include "ui/hot_key_ctrl.h"
 
+#include <atlstr.h>
+
 #include "res/resource.h"
 
 HotKeyCtrl::HotKeyCtrl()

@@ -2,6 +2,8 @@
 
 #include "ui/main_frame.h"
 
+#include <atlstr.h>
+
 #include <base/logging.h>
 
 #include "app/constants.h"

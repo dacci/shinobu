@@ -4,6 +4,7 @@
 #define SHINOBU_MODULE_WOL_WAKEUP_TARGETS_PAGE_H_
 
 #include <atlbase.h>
+#include <atlstr.h>
 
 #include <atlapp.h>
 #include <atlcrack.h>

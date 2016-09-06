@@ -5,6 +5,7 @@
 
 #include <atlbase.h>
 #include <atlcomcli.h>
+#include <atlstr.h>
 
 #include <atlapp.h>
 #include <atlcrack.h>

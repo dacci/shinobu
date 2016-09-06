@@ -10,6 +10,8 @@
 #include <atlcrack.h>
 #include <atlframe.h>
 
+#include <shellapi.h>
+
 #include <memory>
 
 #include "res/resource.h"
