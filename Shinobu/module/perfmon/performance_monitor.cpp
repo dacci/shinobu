@@ -60,7 +60,8 @@ PerformanceMonitor::PerformanceMonitor()
       application_(nullptr),
       message_window_(NULL),
       timer_id_(0),
-      enabled_(false),
+      configured_enabled_(false),
+      enabled_(configured_enabled_),
       block_(false),
       sleep_(false),
       monitor_cpu_(false),
@@ -165,8 +166,10 @@ void PerformanceMonitor::PreparePropertyPage(PropertyDialog* parent) {
 void PerformanceMonitor::LoadSettings() {
   auto preferences = application_->GetPreferences(perfmon::kPreferenceName);
 
-  enabled_ = preferences->GetInteger(perfmon::kMonitorPerformanceValue,
-                                     perfmon::kMonitorPerformanceDefault) != 0;
+  configured_enabled_ =
+      preferences->GetInteger(perfmon::kMonitorPerformanceValue,
+                              perfmon::kMonitorPerformanceDefault) != 0;
+  enabled_ = configured_enabled_;
 
   monitor_cpu_ = preferences->GetInteger(perfmon::kMonitorCpuValue,
                                          perfmon::kMonitorCpuDefault) != 0;
@@ -209,7 +212,8 @@ void PerformanceMonitor::LoadSettings() {
 
 void PerformanceMonitor::SaveSettings() const {
   auto preferences = application_->GetPreferences(perfmon::kPreferenceName);
-  preferences->PutInteger(perfmon::kMonitorPerformanceValue, enabled_);
+  preferences->PutInteger(perfmon::kMonitorPerformanceValue,
+                          configured_enabled_);
 }
 
 void PerformanceMonitor::BlockShutdown() {
@@ -302,9 +306,25 @@ void PerformanceMonitor::OnTimer(UINT_PTR /*timer_id*/) {
   }
 }
 
+BOOL PerformanceMonitor::OnPowerBroadcast(DWORD power_event,
+                                          DWORD_PTR /*event_data*/) {
+  switch (power_event) {
+    case PBT_APMSUSPEND:
+      enabled_ = false;
+      break;
+
+    case PBT_APMRESUMESUSPEND:
+      enabled_ = configured_enabled_;
+      break;
+  }
+
+  return TRUE;
+}
+
 void PerformanceMonitor::OnMonitorPerformance(UINT /*notify_code*/, int /*id*/,
                                               CWindow /*control*/) {
   enabled_ = !enabled_;
+  configured_enabled_ = enabled_;
 
   if (!enabled_)
     UnblockShutdown();

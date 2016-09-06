@@ -34,6 +34,7 @@ class PerformanceMonitor : public Module {
     MSG_WM_QUERYENDSESSION(OnQueryEndSession)
     MSG_WM_ENDSESSION(OnEndSession)
     MSG_WM_TIMER(OnTimer)
+    MSG_WM_POWERBROADCAST(OnPowerBroadcast)
 
     COMMAND_ID_HANDLER_EX(ID_MONITOR_PERFORMANCE, OnMonitorPerformance)
     COMMAND_ID_HANDLER_EX(ID_TRAFFIC_SLEEP, OnTrafficSleep)
@@ -49,6 +50,7 @@ class PerformanceMonitor : public Module {
   BOOL OnQueryEndSession(UINT source, UINT log_off);
   void OnEndSession(BOOL ending, UINT log_off);
   void OnTimer(UINT_PTR timer_id);
+  BOOL OnPowerBroadcast(DWORD power_event, DWORD_PTR event_data);
 
   void OnMonitorPerformance(UINT notify_code, int id, CWindow control);
   void OnTrafficSleep(UINT notify_code, int id, CWindow control);
@@ -57,6 +59,7 @@ class PerformanceMonitor : public Module {
   HWND message_window_;
   UINT_PTR timer_id_;
 
+  bool configured_enabled_;
   bool enabled_;
   bool block_;
   bool sleep_;
