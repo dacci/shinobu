@@ -9,8 +9,6 @@
 #include <memory>
 #include <string>
 
-#include "module/clipbrd/ptr_circular_buffer.h"
-
 class Clipboard {
  public:
   class Format {
@@ -58,7 +56,7 @@ class Clipboard {
   explicit Clipboard(HWND owner);
 
   static std::unique_ptr<Clipboard> Capture();
-  static bool Set(const Clipboard& clipboard, HWND fallback_owner);
+  static bool Set(const Clipboard* clipboard, HWND fallback_owner);
 
   bool Has(UINT format_id) const;
   const Format& Get(UINT format_id) const;
@@ -84,8 +82,5 @@ class Clipboard {
   HWND owner_;
   FormatMap formats_;
 };
-
-typedef ptr_circular_buffer<Clipboard> ClipboardRing;
-typedef ptr_circular_buffer<ClipboardRing> ClipboardPool;
 
 #endif  // SHINOBU_MODULE_CLIPBRD_CLIPBOARD_H_

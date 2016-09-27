@@ -9,6 +9,8 @@
 #include <atlcrack.h>
 
 #include "module/module.h"
+#include "module/clipbrd/clipboard.h"
+#include "module/clipbrd/ring_buffer.h"
 #include "res/resource.h"
 
 class ClipboardMonitor : public Module {
@@ -34,6 +36,9 @@ class ClipboardMonitor : public Module {
   void OnHotKey(int id, UINT modifiers, UINT virtual_key);
 
  private:
+  typedef RingBuffer<std::unique_ptr<Clipboard>> ClipboardRing;
+  typedef RingBuffer<ClipboardRing> ClipboardPool;
+
   void LoadSettings();
   void SaveSettings() const;
 
@@ -52,6 +57,7 @@ class ClipboardMonitor : public Module {
   void Capture();
 
   Application* application_;
+  ClipboardPool clipboard_pool_;
   bool monitor_clipboard_;
   bool data_setting_;
 

@@ -7,11 +7,8 @@
 #include "module/application.h"
 #include "module/preferences.h"
 #include "module/property_dialog.h"
-#include "module/clipbrd/clipboard.h"
 #include "module/clipbrd/clipbrd_constants.h"
 #include "module/clipbrd/monitor_clipboard_page.h"
-
-ClipboardPool clipboard_pool;
 
 ClipboardMonitor::ClipboardMonitor()
     : m_bMsgHandled(FALSE),
@@ -80,13 +77,10 @@ void ClipboardMonitor::LoadSettings() {
 
   UINT num_rings = preferences->GetInteger(clipbrd::kNumRingsKeyValue,
                                            clipbrd::kNumRingsDefault);
-  clipboard_pool.set_capacity(num_rings);
-  clipboard_pool.resize(num_rings);
-
   UINT num_entries = preferences->GetInteger(clipbrd::kNumEntriesKeyValue,
                                              clipbrd::kNumEntriesDefault);
-  for (auto& ring : clipboard_pool)
-    ring.set_capacity(num_entries);
+  for (auto i = 0U; i < num_rings; ++i)
+    clipboard_pool_.push(ClipboardRing(num_entries));
 
   monitor_clipboard_ = preferences->GetInteger(
                            clipbrd::kMonitorClipboardKeyValue, TRUE) != FALSE;
@@ -160,7 +154,7 @@ UINT ClipboardMonitor::PrepareMenu(CMenu* menu, UINT /*id_first*/,
   CString default_caption;
   default_caption.LoadString(IDS_CLIPBOARD_DATA);
 
-  for (auto& ring : clipboard_pool) {
+  for (auto& ring : clipboard_pool_) {
     CMenuHandle content_menu;
     content_menu.CreateMenu();
 
@@ -169,10 +163,10 @@ UINT ClipboardMonitor::PrepareMenu(CMenu* menu, UINT /*id_first*/,
     for (auto& clipboard : ring) {
       caption.Format(L"%d: ", ++data_index);
 
-      if (clipboard.Has(CF_UNICODETEXT))
-        caption += static_cast<wchar_t*>(clipboard.Get(CF_UNICODETEXT).Get());
-      else if (clipboard.Has(CF_TEXT))
-        caption += static_cast<char*>(clipboard.Get(CF_TEXT).Get());
+      if (clipboard->Has(CF_UNICODETEXT))
+        caption += static_cast<wchar_t*>(clipboard->Get(CF_UNICODETEXT).Get());
+      else if (clipboard->Has(CF_TEXT))
+        caption += static_cast<char*>(clipboard->Get(CF_TEXT).Get());
       else
         caption += default_caption;
 
@@ -215,19 +209,19 @@ void ClipboardMonitor::OnHotKey(int id, UINT /*modifiers*/,
     return;
 
   if (id == next_ring_hot_key_)
-    clipboard_pool.Rotate(1);
+    clipboard_pool_.rotate(1);
   else if (id == prev_ring_hot_key_)
-    clipboard_pool.Rotate(-1);
+    clipboard_pool_.rotate(-1);
   else if (id == next_entry_hot_key_)
-    clipboard_pool.front().Rotate(-1);
+    clipboard_pool_.front().rotate(-1);
   else if (id == prev_entry_hot_key_)
-    clipboard_pool.front().Rotate(1);
+    clipboard_pool_.front().rotate(1);
   else if (id == delete_entry_hot_key_)
-    clipboard_pool.front().Pop();
+    clipboard_pool_.front().pop();
   else
     return;
 
-  const auto& clipboard_ring = clipboard_pool.front();
+  const auto& clipboard_ring = clipboard_pool_.front();
   data_setting_ = true;
 
   if (clipboard_ring.empty()) {
@@ -237,7 +231,7 @@ void ClipboardMonitor::OnHotKey(int id, UINT /*modifiers*/,
     }
   } else {
     auto fallback_owner = application_->GetMessageWindow();
-    Clipboard::Set(clipboard_ring.front(), fallback_owner);
+    Clipboard::Set(clipboard_ring.front().get(), fallback_owner);
   }
 
   data_setting_ = false;
@@ -296,7 +290,7 @@ void ClipboardMonitor::Capture() {
   if (::OpenClipboard(NULL)) {
     auto new_entry = Clipboard::Capture();
     if (new_entry != nullptr)
-      clipboard_pool.front().Push(new_entry.release());
+      clipboard_pool_.front().push(std::move(new_entry));
 
     CloseClipboard();
   } else {

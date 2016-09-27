@@ -230,7 +230,7 @@
     <ClInclude Include="module\clipbrd\clipboard_monitor.h" />
     <ClInclude Include="module\clipbrd\clipbrd_constants.h" />
     <ClInclude Include="module\clipbrd\monitor_clipboard_page.h" />
-    <ClInclude Include="module\clipbrd\ptr_circular_buffer.h" />
+    <ClInclude Include="module\clipbrd\ring_buffer.h" />
     <ClInclude Include="module\module.h" />
     <ClInclude Include="module\perfmon\perfmon_constants.h" />
     <ClInclude Include="module\perfmon\performance_counter.h" />

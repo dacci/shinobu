@@ -74,9 +74,9 @@ std::unique_ptr<Clipboard> Clipboard::Capture() {
   return clipboard;
 }
 
-bool Clipboard::Set(const Clipboard& clipboard, HWND fallback_owner) {
+bool Clipboard::Set(const Clipboard* clipboard, HWND fallback_owner) {
   auto fallback = false;
-  if (!OpenClipboard(clipboard.owner())) {
+  if (!OpenClipboard(clipboard->owner())) {
     if (!OpenClipboard(fallback_owner))
       return false;
 
@@ -88,7 +88,7 @@ bool Clipboard::Set(const Clipboard& clipboard, HWND fallback_owner) {
     return false;
   }
 
-  for (auto& pair : clipboard) {
+  for (auto& pair : *clipboard) {
     const auto& format_id = pair.first;
     if (fallback && format_id == CF_OWNERDISPLAY)
       continue;
