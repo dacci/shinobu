@@ -59,7 +59,7 @@ class ClipboardMonitor : public Module {
   Application* application_;
   ClipboardPool clipboard_pool_;
   bool monitor_clipboard_;
-  bool data_setting_;
+  bool ignore_next_update_;
 
   UINT prev_ring_key_;
   UINT prev_ring_modifiers_;

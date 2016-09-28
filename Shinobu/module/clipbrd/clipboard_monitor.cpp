@@ -14,7 +14,7 @@ ClipboardMonitor::ClipboardMonitor()
     : m_bMsgHandled(FALSE),
       application_(nullptr),
       monitor_clipboard_(false),
-      data_setting_(false),
+      ignore_next_update_(false),
       prev_ring_key_(0),
       prev_ring_modifiers_(0),
       prev_ring_hot_key_(0),
@@ -52,8 +52,6 @@ void ClipboardMonitor::Stop() {
 }
 
 void ClipboardMonitor::Configure(int result) {
-  data_setting_ = true;
-
   switch (result) {
     case 0:
       StopClipboardMonitor();
@@ -68,8 +66,6 @@ void ClipboardMonitor::Configure(int result) {
       RegisterHotKeys();
       break;
   }
-
-  data_setting_ = false;
 }
 
 void ClipboardMonitor::LoadSettings() {
@@ -221,9 +217,9 @@ void ClipboardMonitor::OnHotKey(int id, UINT /*modifiers*/,
   else
     return;
 
-  const auto& clipboard_ring = clipboard_pool_.front();
-  data_setting_ = true;
+  ignore_next_update_ = true;
 
+  const auto& clipboard_ring = clipboard_pool_.front();
   if (clipboard_ring.empty()) {
     if (OpenClipboard()) {
       EmptyClipboard();
@@ -233,8 +229,6 @@ void ClipboardMonitor::OnHotKey(int id, UINT /*modifiers*/,
     auto fallback_owner = application_->GetMessageWindow();
     Clipboard::Set(clipboard_ring.front().get(), fallback_owner);
   }
-
-  data_setting_ = false;
 
   SetMsgHandled(TRUE);
 }
@@ -265,6 +259,11 @@ BOOL ClipboardMonitor::OpenClipboard() {
 
 LRESULT ClipboardMonitor::OnClipboardUpdate(UINT /*message*/, WPARAM /*wParam*/,
                                             LPARAM /*lParam*/) {
+  if (ignore_next_update_) {
+    ignore_next_update_ = false;
+    return 0;
+  }
+
   if (timer_ == NULL)
     CreateTimerQueueTimer(&timer_, NULL, TimerCallback, this, kCaptureDelay, 0,
                           WT_EXECUTEONLYONCE);
@@ -284,9 +283,6 @@ void CALLBACK ClipboardMonitor::TimerCallback(PVOID parameter,
 }
 
 void ClipboardMonitor::Capture() {
-  if (data_setting_)
-    return;
-
   if (::OpenClipboard(NULL)) {
     auto new_entry = Clipboard::Capture();
     if (new_entry != nullptr)
