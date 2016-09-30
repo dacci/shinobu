@@ -1,3 +1,6 @@
 [submodule "third_party/libchromium"]
 	path = third_party/libchromium
 	url = https://github.com/dacci/libchromium.git
+[submodule "third_party/msgpack-c"]
+	path = third_party/msgpack-c
+	url = https://github.com/msgpack/msgpack-c.git

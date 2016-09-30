@@ -73,25 +73,25 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration).$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)Build\$(ProjectName)\$(Configuration).$(Platform)\</IntDir>
-    <IncludePath>$(ProjectDir);$(SolutionDir)third_party\libchromium\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)third_party\libchromium\src;$(SolutionDir)third_party\msgpack-c\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration).$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)Build\$(ProjectName)\$(Configuration).$(Platform)\</IntDir>
-    <IncludePath>$(ProjectDir);$(SolutionDir)third_party\libchromium\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)third_party\libchromium\src;$(SolutionDir)third_party\msgpack-c\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration).$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)Build\$(ProjectName)\$(Configuration).$(Platform)\</IntDir>
-    <IncludePath>$(ProjectDir);$(SolutionDir)third_party\libchromium\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)third_party\libchromium\src;$(SolutionDir)third_party\msgpack-c\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Configuration).$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)Build\$(ProjectName)\$(Configuration).$(Platform)\</IntDir>
-    <IncludePath>$(ProjectDir);$(SolutionDir)third_party\libchromium\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)third_party\libchromium\src;$(SolutionDir)third_party\msgpack-c\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -201,6 +201,10 @@
   <ItemGroup>
     <ClCompile Include="app\application.cpp" />
     <ClCompile Include="app\constants.cpp" />
+    <ClCompile Include="app\ipc\ipc_client.cpp" />
+    <ClCompile Include="app\ipc\ipc_server.cpp" />
+    <ClCompile Include="app\ipc\ipc_session.cpp" />
+    <ClCompile Include="app\ipc\named_pipe.cpp" />
     <ClCompile Include="module\application_impl.cpp" />
     <ClCompile Include="module\audio\audio_device_manager.cpp" />
     <ClCompile Include="module\clipbrd\clipboard.cpp" />
@@ -223,6 +227,11 @@
   <ItemGroup>
     <ClInclude Include="app\application.h" />
     <ClInclude Include="app\constants.h" />
+    <ClInclude Include="app\ipc\ipc_client.h" />
+    <ClInclude Include="app\ipc\ipc_common.h" />
+    <ClInclude Include="app\ipc\ipc_server.h" />
+    <ClInclude Include="app\ipc\ipc_session.h" />
+    <ClInclude Include="app\ipc\named_pipe.h" />
     <ClInclude Include="module\application.h" />
     <ClInclude Include="module\application_impl.h" />
     <ClInclude Include="module\audio\audio_device_manager.h" />
