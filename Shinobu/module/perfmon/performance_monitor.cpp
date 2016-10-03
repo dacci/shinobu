@@ -4,18 +4,25 @@
 
 #include <powrprof.h>
 
+#pragma warning(push)
+#pragma warning(disable : 4267 4702)
+#include <msgpack.hpp>
+#pragma warning(pop)
+
 #include <base/logging.h>
 
 #include <algorithm>
 #include <numeric>
+#include <string>
 #include <vector>
 
 #include "module/application.h"
 #include "module/preferences.h"
 #include "module/property_dialog.h"
+
 #include "module/perfmon/perfmon_constants.h"
-#include "module/perfmon/performance_monitor_page.h"
 #include "module/perfmon/performance_counter.h"
+#include "module/perfmon/performance_monitor_page.h"
 
 namespace {
 
@@ -161,6 +168,38 @@ void PerformanceMonitor::PreparePropertyPage(PropertyDialog* parent) {
   auto page = std::make_unique<PerformanceMonitorPage>(application_);
   if (page != nullptr && parent->AddPage(page->m_psp))
     page.release();
+}
+
+HRESULT PerformanceMonitor::InvokeCommand(IpcMethods method,
+                                          const std::string& input,
+                                          std::stringstream* output) {
+  switch (method) {
+    case IpcMethods::kMonitorPerformance: {
+      auto enabled = msgpack::unpack(input.data(), input.size()).get();
+      SetEnabled(enabled.as<bool>());
+
+      msgpack::pack(output, S_OK);
+      break;
+    }
+
+    case IpcMethods::kSleepOnLowLoad:
+      sleep_ = msgpack::unpack(input.data(), input.size()).get().as<bool>();
+      msgpack::pack(output, S_OK);
+      break;
+
+    default:
+      return E_NOTIMPL;
+  }
+
+  return S_OK;
+}
+
+void PerformanceMonitor::SetEnabled(bool enabled) {
+  enabled_ = enabled;
+  configured_enabled_ = enabled;
+
+  if (enabled)
+    UnblockShutdown();
 }
 
 void PerformanceMonitor::LoadSettings() {
@@ -323,11 +362,7 @@ BOOL PerformanceMonitor::OnPowerBroadcast(DWORD power_event,
 
 void PerformanceMonitor::OnMonitorPerformance(UINT /*notify_code*/, int /*id*/,
                                               CWindow /*control*/) {
-  enabled_ = !enabled_;
-  configured_enabled_ = enabled_;
-
-  if (!enabled_)
-    UnblockShutdown();
+  SetEnabled(!IsEnabled());
 }
 
 void PerformanceMonitor::OnTrafficSleep(UINT /*notify_code*/, int /*id*/,

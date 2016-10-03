@@ -4,9 +4,12 @@
 
 #include <base/logging.h>
 
+#include <string>
+
 #include "module/application.h"
 #include "module/preferences.h"
 #include "module/property_dialog.h"
+
 #include "module/wol/wakeup_targets_page.h"
 
 namespace wol {
@@ -72,6 +75,12 @@ void WakeupManager::PreparePropertyPage(PropertyDialog* parent) {
   auto page = std::make_unique<WakeupTargetsPage>(this);
   if (page != nullptr && parent->AddPage(page->m_psp))
     page.release();
+}
+
+HRESULT WakeupManager::InvokeCommand(IpcMethods /*method*/,
+                                     const std::string& /*input*/,
+                                     std::stringstream* /*output*/) {
+  return E_NOTIMPL;
 }
 
 void WakeupManager::OnCommand(UINT /*notify_code*/, int id,

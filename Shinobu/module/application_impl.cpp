@@ -2,13 +2,20 @@
 
 #include "module/application_impl.h"
 
+#pragma warning(push, 3)
+#pragma warning(disable : 4267 4702)
+#include <msgpack.hpp>
+#pragma warning(pop)
+
 #include <base/logging.h>
 
+#include <string>
 #include <vector>
 
 #include "app/constants.h"
 #include "module/module.h"
 #include "module/registry_preferences.h"
+
 #include "module/audio/audio_device_manager.h"
 #include "module/clipbrd/clipboard_monitor.h"
 #include "module/perfmon/performance_monitor.h"
@@ -129,6 +136,30 @@ void ApplicationImpl::ProcessWindowMessage(UINT message, WPARAM wParam,
     LRESULT result = 0;
     module->ProcessWindowMessage(NULL, message, wParam, lParam, result, 0);
   }
+}
+
+HRESULT ApplicationImpl::DispatchMethod(std::string* message) {
+  size_t offset = 0;
+  auto method = msgpack::unpack(message->data(), message->size(), offset);
+  message->erase(0, offset);
+
+  std::stringstream stream;
+
+  auto handled = false;
+  for (auto& module : modules_) {
+    auto result = module->InvokeCommand(
+        static_cast<IpcMethods>(method.get().as<int>()), *message, &stream);
+    if (result != E_NOTIMPL) {
+      handled = true;
+      break;
+    }
+  }
+  if (!handled)
+    msgpack::pack(stream, E_NOTIMPL);
+
+  message->assign(stream.str());
+
+  return S_OK;
 }
 
 void ApplicationImpl::OnTimer(HWND /*hWnd*/, UINT /*message*/,

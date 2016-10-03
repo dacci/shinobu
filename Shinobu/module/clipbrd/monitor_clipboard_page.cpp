@@ -4,6 +4,7 @@
 
 #include "module/application.h"
 #include "module/preferences.h"
+
 #include "module/clipbrd/clipbrd_constants.h"
 
 MonitorClipboardPage::MonitorClipboardPage(Application* application)

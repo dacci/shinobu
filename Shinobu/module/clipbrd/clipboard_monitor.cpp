@@ -4,9 +4,12 @@
 
 #include <base/logging.h>
 
+#include <string>
+
 #include "module/application.h"
 #include "module/preferences.h"
 #include "module/property_dialog.h"
+
 #include "module/clipbrd/clipbrd_constants.h"
 #include "module/clipbrd/monitor_clipboard_page.h"
 
@@ -185,6 +188,12 @@ void ClipboardMonitor::PreparePropertyPage(PropertyDialog* parent) {
   auto page = std::make_unique<MonitorClipboardPage>(application_);
   if (page != nullptr && parent->AddPage(page->m_psp))
     page.release();
+}
+
+HRESULT ClipboardMonitor::InvokeCommand(IpcMethods /*method*/,
+                                        const std::string& /*input*/,
+                                        std::stringstream* /*output*/) {
+  return E_NOTIMPL;
 }
 
 void ClipboardMonitor::OnMonitorClipboard(UINT /*notify_code*/, int /*id*/,

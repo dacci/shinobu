@@ -10,9 +10,11 @@
 #include <atlapp.h>
 #include <atlcrack.h>
 
+#include <string>
 #include <vector>
 
 #include "module/module.h"
+
 #include "module/audio/policy_config_h.h"
 
 class AudioDeviceManager : public Module {
@@ -25,6 +27,9 @@ class AudioDeviceManager : public Module {
 
   UINT PrepareMenu(CMenu* menu, UINT id_first, UINT id_last) override;
   void PreparePropertyPage(PropertyDialog* /*parent*/) override {}
+
+  HRESULT InvokeCommand(IpcMethods method, const std::string& input,
+                        std::stringstream* output) override;
 
   BEGIN_MSG_MAP_EX(AudioDeviceManager)
     COMMAND_RANGE_HANDLER_EX(menu_first_, menu_last_, OnCommand)

@@ -15,7 +15,9 @@ class IpcClient {
 
   HRESULT Connect();
 
-  HRESULT SomeMethod();
+  // PerformanceMonitor
+  HRESULT MonitorPerformance(bool enable);
+  HRESULT SleepOnLowLoad(bool enable);
 
  private:
   NamedPipe pipe_;

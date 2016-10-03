@@ -4,9 +4,12 @@
 
 #include <atlmisc.h>
 
+#include <string>
+
 #include "module/application.h"
 #include "module/preferences.h"
 #include "module/property_dialog.h"
+
 #include "module/snap/manage_windows_page.h"
 #include "module/snap/snap_constants.h"
 
@@ -97,6 +100,12 @@ void WindowManager::PreparePropertyPage(PropertyDialog* parent) {
   auto page = std::make_unique<ManageWindowsPage>(this, application_);
   if (page != nullptr && parent->AddPage(page->m_psp))
     page.release();
+}
+
+HRESULT WindowManager::InvokeCommand(IpcMethods /*method*/,
+                                     const std::string& /*input*/,
+                                     std::stringstream* /*output*/) {
+  return E_NOTIMPL;
 }
 
 void WindowManager::LoadSettings() {

@@ -10,6 +10,7 @@
 
 #include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "module/application.h"
@@ -39,6 +40,8 @@ class ApplicationImpl : public Application {
   void PreparePropertyPage(PropertyDialog* parent);
 
   void ProcessWindowMessage(UINT message, WPARAM wParam, LPARAM lParam);
+
+  HRESULT DispatchMethod(std::string* message);
 
  private:
   static void CALLBACK OnTimer(HWND hWnd, UINT message, UINT_PTR timer_id,

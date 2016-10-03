@@ -6,8 +6,10 @@
 
 #include "app/constants.h"
 #include "app/ipc/ipc_session.h"
+#include "module/application_impl.h"
 
-IpcServer::IpcServer() : empty_(&lock_) {}
+IpcServer::IpcServer(ApplicationImpl* application)
+    : application_(application), empty_(&lock_) {}
 
 IpcServer::~IpcServer() {
   Stop();
@@ -74,7 +76,7 @@ void IpcServer::OnAccepted(NamedPipe* pipe, HRESULT result) {
   base::AutoLock guard(lock_);
 
   do {
-    auto session = std::make_unique<IpcSession>(this);
+    auto session = std::make_unique<IpcSession>(this, application_);
     if (session == nullptr) {
       LOG(ERROR) << "Failed to create session.";
       break;

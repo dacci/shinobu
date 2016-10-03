@@ -4,7 +4,17 @@
 #define SHINOBU_APP_IPC_IPC_COMMON_H_
 
 enum class IpcMethods {
-  kSomeMethod,
+  // ClipboardMonitor
+
+  // WindowManager
+
+  // PerformanceMonitor
+  kMonitorPerformance = 3000,
+  kSleepOnLowLoad,
+
+  // AudioDeviceManager
+
+  // WakeupManager
 };
 
 #endif  // SHINOBU_APP_IPC_IPC_COMMON_H_

@@ -38,9 +38,19 @@ HRESULT IpcClient::Connect() {
   return S_OK;
 }
 
-HRESULT IpcClient::SomeMethod() {
+HRESULT IpcClient::MonitorPerformance(bool enable) {
   std::stringstream stream;
-  msgpack::pack(stream, static_cast<int>(IpcMethods::kSomeMethod));
+  msgpack::pack(stream, static_cast<int>(IpcMethods::kMonitorPerformance));
+  msgpack::pack(stream, enable);
+
+  auto message = stream.str();
+  return DispatchMethod(&message);
+}
+
+HRESULT IpcClient::SleepOnLowLoad(bool enable) {
+  std::stringstream stream;
+  msgpack::pack(stream, static_cast<int>(IpcMethods::kSleepOnLowLoad));
+  msgpack::pack(stream, enable);
 
   auto message = stream.str();
   return DispatchMethod(&message);

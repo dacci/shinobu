@@ -8,6 +8,11 @@
 #include <atlapp.h>
 #include <atluser.h>
 
+#include <sstream>
+#include <string>
+
+#include "app/ipc/ipc_common.h"
+
 class Application;
 class PropertyDialog;
 
@@ -21,6 +26,9 @@ class Module {
 
   virtual UINT PrepareMenu(CMenu* menu, UINT id_first, UINT id_last) = 0;
   virtual void PreparePropertyPage(PropertyDialog* parent) = 0;
+
+  virtual HRESULT InvokeCommand(IpcMethods method, const std::string& input,
+                                std::stringstream* output) = 0;
 
   virtual BOOL ProcessWindowMessage(
       HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam,

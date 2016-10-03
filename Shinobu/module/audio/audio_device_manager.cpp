@@ -7,6 +7,7 @@
 #include <base/win/scoped_propvariant.h>
 
 #include <algorithm>
+#include <string>
 
 #include "res/resource.h"
 
@@ -173,6 +174,12 @@ UINT AudioDeviceManager::PrepareMenu(CMenu* menu, UINT id_first, UINT id_last) {
   menu->AppendMenu(MF_POPUP, capturers, caption);
 
   return command_id - id_first;
+}
+
+HRESULT AudioDeviceManager::InvokeCommand(IpcMethods /*method*/,
+                                          const std::string& /*input*/,
+                                          std::stringstream* /*output*/) {
+  return E_NOTIMPL;
 }
 
 void AudioDeviceManager::OnCommand(UINT /*notify_code*/, int id,

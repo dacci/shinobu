@@ -9,6 +9,8 @@
 #include <atlcrack.h>
 #include <atlmisc.h>
 
+#include <string>
+
 #include "module/module.h"
 #include "res/resource.h"
 
@@ -25,6 +27,9 @@ class WindowManager : public Module {
 
   UINT PrepareMenu(CMenu* menu, UINT id_first, UINT id_last) override;
   void PreparePropertyPage(PropertyDialog* parent) override;
+
+  HRESULT InvokeCommand(IpcMethods method, const std::string& input,
+                        std::stringstream* output) override;
 
   UINT resize_width() const {
     return resize_width_;

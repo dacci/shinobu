@@ -12,9 +12,32 @@
 #pragma warning(pop)
 
 #include "app/constants.h"
+#include "app/ipc/ipc_client.h"
 #include "ui/main_frame.h"
 
 CAppModule _Module;
+
+static int SecondaryMain() {
+  IpcClient ipc_client;
+  auto result = ipc_client.Connect();
+  if (FAILED(result)) {
+    LOG(ERROR) << "Failed to create IPC client: 0x" << std::hex << result;
+    return __LINE__;
+  }
+
+  auto command_line = base::CommandLine::ForCurrentProcess();
+  if (command_line->HasSwitch("enable-monitor-performance")) {
+    ipc_client.MonitorPerformance(true);
+  } else if (command_line->HasSwitch("disable-monitor-performance")) {
+    ipc_client.MonitorPerformance(false);
+  } else if (command_line->HasSwitch("enable-sleep-on-low-load")) {
+    ipc_client.SleepOnLowLoad(true);
+  } else if (command_line->HasSwitch("disable-sleep-on-low-load")) {
+    ipc_client.SleepOnLowLoad(false);
+  }
+
+  return 0;
+}
 
 int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
                        wchar_t* /*command_line*/, int /*show_mode*/) {
@@ -34,9 +57,11 @@ int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
   base::AtExitManager at_exit_manager;
 
   if (base::CommandLine::Init(0, nullptr)) {
+    // clang-format off
     base::AtExitManager::RegisterCallback([](void* /*param*/) {
       base::CommandLine::Reset();
     }, nullptr);
+    // clang-format on
   } else {
     return __LINE__;
   }
@@ -45,23 +70,35 @@ int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
   logging_settings.logging_dest = logging::LOG_TO_SYSTEM_DEBUG_LOG;
   if (logging::InitLogging(logging_settings)) {
     logging::LogEventProvider::Initialize(GUID_SHINOBU_APP);
+
+    // clang-format off
     base::AtExitManager::RegisterCallback([](void* /*param*/) {
       logging::LogEventProvider::Uninitialize();
     }, nullptr);
+    // clang-format on
   }
 
   auto mutex = CreateMutex(nullptr, FALSE, kMutexName);
   if (mutex != NULL) {
+    // clang-format off
     base::AtExitManager::RegisterCallback([](void* local_mutex) {
       CloseHandle(local_mutex);
     }, mutex);
+    // clang-format on
 
-    if (WaitForSingleObject(mutex, 0) == WAIT_OBJECT_0) {
+    auto wait_result = WaitForSingleObject(mutex, 0);
+    if (wait_result == WAIT_OBJECT_0) {
+      // clang-format off
       base::AtExitManager::RegisterCallback([](void* local_mutex) {
         ReleaseMutex(local_mutex);
       }, mutex);
+      // clang-format on
+    } else if (wait_result == WAIT_TIMEOUT) {
+      LOG(INFO) << "Another instance seems running.";
+      return SecondaryMain();
     } else {
-      LOG(WARNING) << "Another instance maybe running: " << GetLastError();
+      LOG(ERROR) << "Unexpected error occurred on the mutex: "
+                 << GetLastError();
       return __LINE__;
     }
   } else {
@@ -71,9 +108,11 @@ int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
 
   auto result = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
   if (SUCCEEDED(result)) {
+    // clang-format off
     base::AtExitManager::RegisterCallback([](void* /*param*/) {
       CoUninitialize();
     }, nullptr);
+    // clang-format on
   } else {
     LOG(ERROR) << "Failed to initialize COM: 0x" << std::hex << result;
     return __LINE__;
@@ -88,9 +127,12 @@ int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
   auto error = WSAStartup(WINSOCK_VERSION, &wsa_data);
   if (error == 0) {
     DLOG(INFO) << wsa_data.szDescription << " " << wsa_data.szSystemStatus;
+
+    // clang-format off
     base::AtExitManager::RegisterCallback([](void* /*param*/) {
       WSACleanup();
     }, nullptr);
+    // clang-format on
   } else {
     LOG(ERROR) << "Failed to initialize WinSock: " << error;
     return __LINE__;
@@ -98,9 +140,11 @@ int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
 
   result = _Module.Init(nullptr, hInstance);
   if (SUCCEEDED(result)) {
+    // clang-format off
     base::AtExitManager::RegisterCallback([](void* /*param*/) {
       _Module.Term();
     }, nullptr);
+    // clang-format on
   } else {
     LOG(ERROR) << "Failed to initialize WTL module: 0x" << std::hex << result;
     return __LINE__;
@@ -108,10 +152,12 @@ int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
 
   CMessageLoop message_loop;
   if (_Module.AddMessageLoop(&message_loop)) {
+    // clang-format off
     base::AtExitManager::RegisterCallback([](void* /*param*/) {
       if (!_Module.RemoveMessageLoop())
         LOG(WARNING) << "Failed to remove message loop.";
     }, nullptr);
+    // clang-format on
   } else {
     LOG(ERROR) << "Failed to create message loop.";
     return __LINE__;

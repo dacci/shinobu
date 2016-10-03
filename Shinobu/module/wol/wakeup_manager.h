@@ -26,6 +26,9 @@ class WakeupManager : public Module {
   UINT PrepareMenu(CMenu* menu, UINT id_first, UINT id_last) override;
   void PreparePropertyPage(PropertyDialog* parent) override;
 
+  HRESULT InvokeCommand(IpcMethods method, const std::string& input,
+                        std::stringstream* output) override;
+
   BEGIN_MSG_MAP_EX(WakeupManager)
     COMMAND_RANGE_HANDLER_EX(menu_first_, menu_last_, OnCommand)
   END_MSG_MAP()

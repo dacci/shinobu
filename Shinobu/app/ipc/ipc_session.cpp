@@ -12,13 +12,15 @@
 #include <string>
 
 #include "app/constants.h"
-#include "app/ipc/ipc_common.h"
 #include "app/ipc/ipc_server.h"
+#include "module/application_impl.h"
 
 DWORD IpcSession::session_id_source_ = 0;
 
-IpcSession::IpcSession(IpcServer* server)
-    : server_(server), session_id_(session_id_source_++) {}
+IpcSession::IpcSession(IpcServer* server, ApplicationImpl* application)
+    : server_(server),
+      application_(application),
+      session_id_(session_id_source_++) {}
 
 HRESULT IpcSession::Start() {
   wchar_t pipe_name[256];
@@ -42,32 +44,6 @@ HRESULT IpcSession::Start() {
 
 void IpcSession::Stop() {
   pipe_.Close();
-}
-
-HRESULT IpcSession::DispatchMethod(std::string* message) {
-  size_t offset = 0;
-  auto method = msgpack::unpack(message->data(), message->size(), offset);
-  message->erase(0, offset);
-
-  std::stringstream stream;
-
-  switch (static_cast<IpcMethods>(method.get().as<int>())) {
-    case IpcMethods::kSomeMethod:
-      SomeMethod(*message, &stream);
-      break;
-
-    default:
-      msgpack::pack(stream, E_NOTIMPL);
-  }
-
-  message->assign(stream.str());
-
-  return S_OK;
-}
-
-void IpcSession::SomeMethod(const std::string& /*input*/,
-                            std::stringstream* output) {
-  msgpack::pack(output, E_NOTIMPL);
 }
 
 void IpcSession::OnAccepted(NamedPipe* /*pipe*/, HRESULT result) {
@@ -120,7 +96,7 @@ void IpcSession::OnRead(NamedPipe* /*pipe*/, HRESULT result, void* /*buffer*/,
       break;
     }
 
-    result = DispatchMethod(&message);
+    result = application_->DispatchMethod(&message);
     if (FAILED(result)) {
       LOG(ERROR) << "Failed to dispatch method: 0x" << std::hex << result;
       break;

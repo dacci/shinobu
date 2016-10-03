@@ -5,16 +5,14 @@
 
 #include <windows.h>
 
-#include <sstream>
-#include <string>
-
 #include "app/ipc/named_pipe.h"
 
+class ApplicationImpl;
 class IpcServer;
 
 class IpcSession : private NamedPipe::Listener {
  public:
-  explicit IpcSession(IpcServer* server);
+  IpcSession(IpcServer* server, ApplicationImpl* application);
 
   HRESULT Start();
   void Stop();
@@ -26,10 +24,6 @@ class IpcSession : private NamedPipe::Listener {
  private:
   friend class IpcServer;
 
-  HRESULT DispatchMethod(std::string* message);
-
-  void SomeMethod(const std::string& input, std::stringstream* output);
-
   void OnAccepted(NamedPipe* pipe, HRESULT result) override;
   void OnRead(NamedPipe* pipe, HRESULT result, void* buffer,
               ULONG_PTR bytes) override;
@@ -39,6 +33,8 @@ class IpcSession : private NamedPipe::Listener {
   static DWORD session_id_source_;
 
   IpcServer* const server_;
+  ApplicationImpl* const application_;
+
   const DWORD session_id_;
   NamedPipe pipe_;
   char buffer_[1024];

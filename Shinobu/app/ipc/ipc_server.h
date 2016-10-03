@@ -11,11 +11,12 @@
 
 #include "app/ipc/named_pipe.h"
 
+class ApplicationImpl;
 class IpcSession;
 
 class IpcServer : private NamedPipe::Listener {
  public:
-  IpcServer();
+  explicit IpcServer(ApplicationImpl* application);
   ~IpcServer();
 
   HRESULT Start();
@@ -32,6 +33,8 @@ class IpcServer : private NamedPipe::Listener {
               ULONG_PTR /*bytes*/) override {}
   void OnWritten(NamedPipe* /*pipe*/, HRESULT /*result*/, void* /*buffer*/,
                  ULONG_PTR /*bytes*/) override {}
+
+  ApplicationImpl* const application_;
 
   base::Lock lock_;
   NamedPipe pipe_;

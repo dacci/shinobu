@@ -17,6 +17,7 @@
 #include "res/resource.h"
 
 class ApplicationImpl;
+class IpcServer;
 
 class MainFrame : public CFrameWindowImpl<MainFrame>, private CMessageFilter {
  public:
@@ -68,6 +69,7 @@ class MainFrame : public CFrameWindowImpl<MainFrame>, private CMessageFilter {
 
   NOTIFYICONDATA notify_icon_;
   std::unique_ptr<ApplicationImpl> application_;
+  std::unique_ptr<IpcServer> ipc_server_;
 
   MainFrame(const MainFrame&) = delete;
   MainFrame& operator=(const MainFrame&) = delete;

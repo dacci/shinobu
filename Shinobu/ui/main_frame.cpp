@@ -7,6 +7,7 @@
 #include <base/logging.h>
 
 #include "app/constants.h"
+#include "app/ipc/ipc_server.h"
 #include "module/application_impl.h"
 #include "ui/property_dialog_impl.h"
 
@@ -51,10 +52,24 @@ BOOL MainFrame::PreTranslateMessage(MSG* message) {
 }
 
 int MainFrame::OnCreate(CREATESTRUCT* /*create_struct*/) {
+  HRESULT result;
+
   application_ = std::make_unique<ApplicationImpl>(this);
   if (application_ == nullptr) {
     LOG(ERROR) << "Out of memory.";
     return -1;
+  }
+
+  ipc_server_ = std::make_unique<IpcServer>(application_.get());
+  if (ipc_server_ == nullptr) {
+    LOG(ERROR) << "Out of memory.";
+    return -1;
+  }
+
+  result = ipc_server_->Start();
+  if (FAILED(result)) {
+    LOG(ERROR) << "Failed to start IPC server: 0x" << std::hex << result;
+    return __LINE__;
   }
 
   notify_icon_.cbSize = sizeof(notify_icon_);
@@ -66,7 +81,7 @@ int MainFrame::OnCreate(CREATESTRUCT* /*create_struct*/) {
   notify_icon_.uVersion = NOTIFYICON_VERSION_4;
   notify_icon_.guidItem = GUID_SHINOBU_APP;
 
-  auto result =
+  result =
       LoadIconMetric(ModuleHelper::GetResourceInstance(),
                      MAKEINTRESOURCE(IDR_MAIN), LIM_SMALL, &notify_icon_.hIcon);
   if (FAILED(result)) {
@@ -97,7 +112,16 @@ int MainFrame::OnCreate(CREATESTRUCT* /*create_struct*/) {
 void MainFrame::OnDestroy() {
   SetMsgHandled(FALSE);
 
-  application_->Stop();
+  if (ipc_server_ != nullptr) {
+    ipc_server_->Stop();
+    ipc_server_.reset();
+  }
+
+  if (application_ != nullptr) {
+    application_->Stop();
+    application_.reset();
+  }
+
   Shell_NotifyIcon(NIM_DELETE, &notify_icon_);
 }
 

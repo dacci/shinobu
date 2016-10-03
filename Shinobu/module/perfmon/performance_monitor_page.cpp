@@ -4,6 +4,7 @@
 
 #include "module/application.h"
 #include "module/preferences.h"
+
 #include "module/perfmon/perfmon_constants.h"
 
 PerformanceMonitorPage::PerformanceMonitorPage(Application* application)
