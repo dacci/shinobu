@@ -198,7 +198,7 @@ void PerformanceMonitor::SetEnabled(bool enabled) {
   enabled_ = enabled;
   configured_enabled_ = enabled;
 
-  if (enabled)
+  if (!enabled)
     UnblockShutdown();
 }
 
