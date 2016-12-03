@@ -47,7 +47,7 @@ class WindowManager : public Module {
     resize_height_ = resize_height;
   }
 
-  BEGIN_MSG_MAP_EX(WindowManager)
+  BEGIN_MSG_MAP(WindowManager)
     MSG_WM_HOTKEY(OnHotKey)
 
     COMMAND_ID_HANDLER_EX(ID_MANAGE_WINDOWS, OnManageWindows)

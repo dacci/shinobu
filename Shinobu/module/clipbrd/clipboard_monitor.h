@@ -32,7 +32,7 @@ class ClipboardMonitor : public Module {
   HRESULT InvokeCommand(IpcMethods method, const std::string& input,
                         std::stringstream* output) override;
 
-  BEGIN_MSG_MAP_EX(ClipboardMonitor)
+  BEGIN_MSG_MAP(ClipboardMonitor)
     MSG_WM_HOTKEY(OnHotKey)
     MESSAGE_HANDLER_EX(WM_CLIPBOARDUPDATE, OnClipboardUpdate)
 

@@ -14,8 +14,7 @@
 #include "module/snap/snap_constants.h"
 
 WindowManager::WindowManager()
-    : m_bMsgHandled(FALSE),
-      application_(nullptr),
+    : application_(nullptr),
       manage_windows_(false),
       resize_width_(0),
       resize_height_(0),
@@ -220,8 +219,6 @@ void WindowManager::OnManageWindows(UINT /*notify_code*/, int /*id*/,
 }
 
 void WindowManager::OnHotKey(int id, UINT /*modifiers*/, UINT /*virtual_key*/) {
-  SetMsgHandled(FALSE);
-
   if (!manage_windows_)
     return;
 
@@ -272,5 +269,4 @@ void WindowManager::OnHotKey(int id, UINT /*modifiers*/, UINT /*virtual_key*/) {
     return;
 
   target.SetWindowPos(NULL, &rect, SWP_NOSIZE);
-  SetMsgHandled(TRUE);
 }

@@ -11,8 +11,7 @@
 
 #include "res/resource.h"
 
-AudioDeviceManager::AudioDeviceManager()
-    : m_bMsgHandled(FALSE), menu_first_(0), menu_last_(0) {}
+AudioDeviceManager::AudioDeviceManager() : menu_first_(0), menu_last_(0) {}
 
 bool AudioDeviceManager::Start(Application* /*application*/) {
   auto result =
@@ -184,10 +183,8 @@ HRESULT AudioDeviceManager::InvokeCommand(IpcMethods /*method*/,
 
 void AudioDeviceManager::OnCommand(UINT /*notify_code*/, int id,
                                    CWindow /*control*/) {
-  if (device_list_.empty()) {
-    SetMsgHandled(FALSE);
+  if (device_list_.empty())
     return;
-  }
 
   auto& device = device_list_[id - menu_first_];
   policy_config_->SetDefaultEndpoint(device.id, eConsole);

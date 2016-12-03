@@ -29,7 +29,7 @@ class WakeupManager : public Module {
   HRESULT InvokeCommand(IpcMethods method, const std::string& input,
                         std::stringstream* output) override;
 
-  BEGIN_MSG_MAP_EX(WakeupManager)
+  BEGIN_MSG_MAP(WakeupManager)
     COMMAND_RANGE_HANDLER_EX(menu_first_, menu_last_, OnCommand)
   END_MSG_MAP()
 

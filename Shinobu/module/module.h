@@ -34,6 +34,13 @@ class Module {
       HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam,
       LRESULT& lResult,  // NOLINT(runtime/references)
       DWORD map_id) = 0;
+
+ protected:
+  static BOOL IsMsgHandled() {
+    return FALSE;
+  }
+
+  static void SetMsgHandled(BOOL /*handled*/) {}
 };
 
 #endif  // SHINOBU_MODULE_MODULE_H_

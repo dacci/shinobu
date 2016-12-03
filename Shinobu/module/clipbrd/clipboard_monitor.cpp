@@ -14,8 +14,7 @@
 #include "module/clipbrd/monitor_clipboard_page.h"
 
 ClipboardMonitor::ClipboardMonitor()
-    : m_bMsgHandled(FALSE),
-      application_(nullptr),
+    : application_(nullptr),
       monitor_clipboard_(false),
       ignore_next_update_(false),
       prev_ring_key_(0),
@@ -208,8 +207,6 @@ void ClipboardMonitor::OnMonitorClipboard(UINT /*notify_code*/, int /*id*/,
 
 void ClipboardMonitor::OnHotKey(int id, UINT /*modifiers*/,
                                 UINT /*virtual_key*/) {
-  SetMsgHandled(FALSE);
-
   if (!monitor_clipboard_)
     return;
 
@@ -238,8 +235,6 @@ void ClipboardMonitor::OnHotKey(int id, UINT /*modifiers*/,
     auto fallback_owner = application_->GetMessageWindow();
     Clipboard::Set(clipboard_ring.front().get(), fallback_owner);
   }
-
-  SetMsgHandled(TRUE);
 }
 
 bool ClipboardMonitor::StartClipboardMonitor() {

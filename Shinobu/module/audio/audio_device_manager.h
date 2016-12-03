@@ -31,7 +31,7 @@ class AudioDeviceManager : public Module {
   HRESULT InvokeCommand(IpcMethods method, const std::string& input,
                         std::stringstream* output) override;
 
-  BEGIN_MSG_MAP_EX(AudioDeviceManager)
+  BEGIN_MSG_MAP(AudioDeviceManager)
     COMMAND_RANGE_HANDLER_EX(menu_first_, menu_last_, OnCommand)
   END_MSG_MAP()
 

@@ -40,7 +40,7 @@ class PerformanceMonitor : public Module {
 
   void SetEnabled(bool enabled);
 
-  BEGIN_MSG_MAP_EX(PerformanceMonitor)
+  BEGIN_MSG_MAP(PerformanceMonitor)
     MSG_WM_QUERYENDSESSION(OnQueryEndSession)
     MSG_WM_ENDSESSION(OnEndSession)
     MSG_WM_TIMER(OnTimer)

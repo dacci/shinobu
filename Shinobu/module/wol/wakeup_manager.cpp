@@ -17,10 +17,7 @@ const wchar_t kPreferenceName[] = L"WakeupManager";
 }
 
 WakeupManager::WakeupManager()
-    : m_bMsgHandled(FALSE),
-      application_(nullptr),
-      menu_first_(0),
-      menu_last_(0) {}
+    : application_(nullptr), menu_first_(0), menu_last_(0) {}
 
 WakeupManager::~WakeupManager() {}
 

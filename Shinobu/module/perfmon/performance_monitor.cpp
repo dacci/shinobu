@@ -63,8 +63,7 @@ double ChangeTrafficUnit(double traffic, int unit) {
 }  // namespace
 
 PerformanceMonitor::PerformanceMonitor()
-    : m_bMsgHandled(FALSE),
-      application_(nullptr),
+    : application_(nullptr),
       message_window_(NULL),
       timer_id_(0),
       configured_enabled_(false),
@@ -293,8 +292,6 @@ BOOL PerformanceMonitor::OnQueryEndSession(UINT /*source*/, UINT /*log_off*/) {
 
 void PerformanceMonitor::OnEndSession(BOOL /*ending*/, UINT /*log_off*/) {
   ShowWindow(message_window_, SW_HIDE);
-
-  SetMsgHandled(FALSE);
 }
 
 void PerformanceMonitor::OnTimer(UINT_PTR /*timer_id*/) {
