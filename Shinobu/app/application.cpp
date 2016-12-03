@@ -26,14 +26,16 @@ static int SecondaryMain() {
   }
 
   auto command_line = base::CommandLine::ForCurrentProcess();
-  if (command_line->HasSwitch("enable-monitor-performance")) {
-    ipc_client.MonitorPerformance(true);
-  } else if (command_line->HasSwitch("disable-monitor-performance")) {
-    ipc_client.MonitorPerformance(false);
-  } else if (command_line->HasSwitch("enable-sleep-on-low-load")) {
-    ipc_client.SleepOnLowLoad(true);
-  } else if (command_line->HasSwitch("disable-sleep-on-low-load")) {
-    ipc_client.SleepOnLowLoad(false);
+  for (auto& pair : command_line->GetSwitches()) {
+    if (pair.first.compare("enable-monitor-performance") == 0) {
+      ipc_client.MonitorPerformance(true);
+    } else if (pair.first.compare("disable-monitor-performance") == 0) {
+      ipc_client.MonitorPerformance(false);
+    } else if (pair.first.compare("enable-sleep-on-low-load") == 0) {
+      ipc_client.SleepOnLowLoad(true);
+    } else if (pair.first.compare("disable-sleep-on-low-load") == 0) {
+      ipc_client.SleepOnLowLoad(false);
+    }
   }
 
   return 0;
@@ -78,6 +80,10 @@ int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
     // clang-format on
   }
 
+  auto command_line = base::CommandLine::ForCurrentProcess();
+  if (!command_line->GetSwitches().empty())
+    return SecondaryMain();
+
   auto mutex = CreateMutex(nullptr, FALSE, kMutexName);
   if (mutex != NULL) {
     // clang-format off
@@ -94,8 +100,8 @@ int __stdcall wWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/,
       }, mutex);
       // clang-format on
     } else if (wait_result == WAIT_TIMEOUT) {
-      LOG(INFO) << "Another instance seems running.";
-      return SecondaryMain();
+      LOG(INFO) << "Another instance seems running, exitting.";
+      return __LINE__;
     } else {
       LOG(ERROR) << "Unexpected error occurred on the mutex: "
                  << GetLastError();
