@@ -199,12 +199,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="app\application.cpp" />
     <ClCompile Include="app\constants.cpp" />
     <ClCompile Include="app\ipc\ipc_client.cpp" />
     <ClCompile Include="app\ipc\ipc_server.cpp" />
     <ClCompile Include="app\ipc\ipc_session.cpp" />
     <ClCompile Include="app\ipc\named_pipe.cpp" />
+    <ClCompile Include="app\shinobu.cpp" />
     <ClCompile Include="module\application_impl.cpp" />
     <ClCompile Include="module\audio\audio_device_manager.cpp" />
     <ClCompile Include="module\clipbrd\clipboard.cpp" />
@@ -225,13 +225,13 @@
     <ClCompile Include="ui\main_frame.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="app\application.h" />
     <ClInclude Include="app\constants.h" />
     <ClInclude Include="app\ipc\ipc_client.h" />
     <ClInclude Include="app\ipc\ipc_common.h" />
     <ClInclude Include="app\ipc\ipc_server.h" />
     <ClInclude Include="app\ipc\ipc_session.h" />
     <ClInclude Include="app\ipc\named_pipe.h" />
+    <ClInclude Include="app\shinobu.h" />
     <ClInclude Include="module\application.h" />
     <ClInclude Include="module\application_impl.h" />
     <ClInclude Include="module\audio\audio_device_manager.h" />
