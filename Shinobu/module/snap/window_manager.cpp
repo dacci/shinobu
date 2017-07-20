@@ -243,28 +243,35 @@ void WindowManager::OnHotKey(int id, UINT /*modifiers*/, UINT /*virtual_key*/) {
   if (!target.GetWindowRect(&rect))
     return;
 
-  CRect screen;
-  SystemParametersInfo(SPI_GETWORKAREA, 0, &screen, 0);
+  auto monitor = MonitorFromWindow(target, MONITOR_DEFAULTTOPRIMARY);
+  if (monitor == NULL)
+    return;
+
+  MONITORINFO monitor_info{sizeof(monitor_info)};
+  if (!GetMonitorInfo(monitor, &monitor_info))
+    return;
+
+  CRect screen(monitor_info.rcWork);
 
   if (id == move_tl_hot_key_ || id == move_ml_hot_key_ ||
       id == move_bl_hot_key_)
-    rect.MoveToX(0);
+    rect.MoveToX(screen.left);
   else if (id == move_tc_hot_key_ || id == move_mc_hot_key_ ||
            id == move_bc_hot_key_)
-    rect.MoveToX((screen.Width() - rect.Width()) / 2);
+    rect.MoveToX(screen.left + (screen.Width() - rect.Width()) / 2);
   else if (id == move_tr_hot_key_ || id == move_mr_hot_key_ ||
            id == move_br_hot_key_)
-    rect.MoveToX(screen.Width() - rect.Width());
+    rect.MoveToX(screen.left + (screen.Width() - rect.Width()));
 
   if (id == move_tl_hot_key_ || id == move_tc_hot_key_ ||
       id == move_tr_hot_key_)
-    rect.MoveToY(0);
+    rect.MoveToY(screen.top);
   else if (id == move_ml_hot_key_ || id == move_mc_hot_key_ ||
            id == move_mr_hot_key_)
-    rect.MoveToY((screen.Height() - rect.Height()) / 2);
+    rect.MoveToY(screen.top + (screen.Height() - rect.Height()) / 2);
   else if (id == move_bl_hot_key_ || id == move_bc_hot_key_ ||
            id == move_br_hot_key_)
-    rect.MoveToY(screen.Height() - rect.Height());
+    rect.MoveToY(screen.top + (screen.Height() - rect.Height()));
   else
     return;
 
