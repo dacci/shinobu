@@ -4,6 +4,7 @@
 
 #include <base/logging.h>
 
+#include <memory>
 #include <string>
 
 #include "module/application.h"

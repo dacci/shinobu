@@ -4,7 +4,9 @@
 
 #include <base/logging.h>
 
+#include <memory>
 #include <string>
+#include <utility>
 
 #include "module/application.h"
 #include "module/preferences.h"

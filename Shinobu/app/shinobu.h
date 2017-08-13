@@ -1,7 +1,7 @@
 // Copyright (c) 2016 dacci.org
 
-#ifndef SHINOBU_SHINOBU_APPLICATION_H_
-#define SHINOBU_SHINOBU_APPLICATION_H_
+#ifndef SHINOBU_APP_SHINOBU_H_
+#define SHINOBU_APP_SHINOBU_H_
 
 #include <atlbase.h>
 
@@ -32,4 +32,4 @@ class Shinobu : public CAtlExeModuleT<Shinobu> {
   Shinobu& operator=(const Shinobu&) = delete;
 };
 
-#endif  // SHINOBU_SHINOBU_APPLICATION_H_
+#endif  // SHINOBU_APP_SHINOBU_H_

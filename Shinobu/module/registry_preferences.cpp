@@ -2,6 +2,8 @@
 
 #include "module/registry_preferences.h"
 
+#include <memory>
+#include <utility>
 #include <vector>
 
 RegistryPreferences::RegistryPreferences(HKEY parent_key,

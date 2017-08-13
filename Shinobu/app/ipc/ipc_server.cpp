@@ -4,6 +4,8 @@
 
 #include <base/logging.h>
 
+#include <utility>
+
 #include "app/constants.h"
 #include "app/ipc/ipc_session.h"
 #include "module/application_impl.h"

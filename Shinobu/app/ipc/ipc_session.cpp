@@ -9,6 +9,7 @@
 
 #include <base/logging.h>
 
+#include <memory>
 #include <string>
 
 #include "app/constants.h"

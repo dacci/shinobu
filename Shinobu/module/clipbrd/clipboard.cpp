@@ -1,5 +1,7 @@
 // Copyright (c) 2016 dacci.org
 
+#include <utility>
+
 #include "module/clipbrd/clipboard.h"
 
 Clipboard::Format::Format(UINT format, SIZE_T size)

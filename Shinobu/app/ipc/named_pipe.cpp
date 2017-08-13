@@ -4,6 +4,8 @@
 
 #include <base/logging.h>
 
+#include <utility>
+
 enum class NamedPipe::Command {
   kAccept,
   kRead,

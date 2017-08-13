@@ -8,6 +8,7 @@
 #include <atlapp.h>
 #include <atlcrack.h>
 
+#include <memory>
 #include <string>
 
 #include "module/module.h"

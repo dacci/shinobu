@@ -4,6 +4,7 @@
 #define SHINOBU_MODULE_CLIPBRD_RING_BUFFER_H_
 
 #include <list>
+#include <utility>
 
 template <class T>
 class RingBuffer {
@@ -12,8 +13,7 @@ class RingBuffer {
   explicit RingBuffer(size_t limit) : limit_(limit) {}
 
   RingBuffer(RingBuffer&& other) noexcept  // NOLINT(build/c++11)
-      : limit_(other.limit_),
-        list_(std::move(other.list_)) {}
+      : limit_(other.limit_), list_(std::move(other.list_)) {}
 
   void push(T&& value) {  // NOLINT(build/c++11)
     list_.push_front(std::move(value));

@@ -3,6 +3,7 @@
 #ifndef SHINOBU_MODULE_REGISTRY_PREFERENCES_H_
 #define SHINOBU_MODULE_REGISTRY_PREFERENCES_H_
 
+#include <memory>
 #include <vector>
 
 #include "module/preferences.h"

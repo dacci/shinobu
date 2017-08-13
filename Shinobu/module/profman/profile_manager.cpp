@@ -14,6 +14,7 @@
 #include <base/win/scoped_propvariant.h>
 
 #include <string>
+#include <utility>
 
 #include "res/resource.h"
 
