@@ -23,6 +23,7 @@
 #define IDS_SECONDS                     119
 #define IDS_MINUTES                     120
 #define IDS_HOURS                       121
+#define IDS_POWER_SCHEME                122
 #define IDC_NUM_RINGS                   1001
 #define IDC_NUM_RINGS_SPIN              1002
 #define IDC_NUM_ENTRIES                 1003

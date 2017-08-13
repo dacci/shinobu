@@ -206,7 +206,6 @@
     <ClCompile Include="app\ipc\named_pipe.cpp" />
     <ClCompile Include="app\shinobu.cpp" />
     <ClCompile Include="module\application_impl.cpp" />
-    <ClCompile Include="module\audio\audio_device_manager.cpp" />
     <ClCompile Include="module\clipbrd\clipboard.cpp" />
     <ClCompile Include="module\clipbrd\clipboard_monitor.cpp" />
     <ClCompile Include="module\clipbrd\clipbrd_constants.cpp" />
@@ -215,6 +214,7 @@
     <ClCompile Include="module\perfmon\performance_counter.cpp" />
     <ClCompile Include="module\perfmon\performance_monitor.cpp" />
     <ClCompile Include="module\perfmon\performance_monitor_page.cpp" />
+    <ClCompile Include="module\profman\profile_manager.cpp" />
     <ClCompile Include="module\registry_preferences.cpp" />
     <ClCompile Include="module\snap\manage_windows_page.cpp" />
     <ClCompile Include="module\snap\snap_constants.cpp" />
@@ -232,9 +232,9 @@
     <ClInclude Include="app\ipc\ipc_session.h" />
     <ClInclude Include="app\ipc\named_pipe.h" />
     <ClInclude Include="app\shinobu.h" />
+    <ClInclude Include="gen\policy_config.h" />
     <ClInclude Include="module\application.h" />
     <ClInclude Include="module\application_impl.h" />
-    <ClInclude Include="module\audio\audio_device_manager.h" />
     <ClInclude Include="module\clipbrd\clipboard.h" />
     <ClInclude Include="module\clipbrd\clipboard_monitor.h" />
     <ClInclude Include="module\clipbrd\clipbrd_constants.h" />
@@ -246,6 +246,7 @@
     <ClInclude Include="module\perfmon\performance_monitor.h" />
     <ClInclude Include="module\perfmon\performance_monitor_page.h" />
     <ClInclude Include="module\preferences.h" />
+    <ClInclude Include="module\profman\profile_manager.h" />
     <ClInclude Include="module\property_dialog.h" />
     <ClInclude Include="module\registry_preferences.h" />
     <ClInclude Include="module\snap\manage_windows_page.h" />
@@ -268,11 +269,15 @@
     <Image Include="res\shinobu.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Midl Include="module\audio\policy_config.idl">
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RelativeDir)</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RelativeDir)</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RelativeDir)</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RelativeDir)</OutputDirectory>
+    <Midl Include="common\policy_config.idl">
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)gen</OutputDirectory>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename).h</HeaderFileName>
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)gen</OutputDirectory>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename).h</HeaderFileName>
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)gen</OutputDirectory>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).h</HeaderFileName>
+      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)gen</OutputDirectory>
+      <HeaderFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).h</HeaderFileName>
     </Midl>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

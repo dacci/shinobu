@@ -16,9 +16,9 @@
 #include "module/module.h"
 #include "module/registry_preferences.h"
 
-#include "module/audio/audio_device_manager.h"
 #include "module/clipbrd/clipboard_monitor.h"
 #include "module/perfmon/performance_monitor.h"
+#include "module/profman/profile_manager.h"
 #include "module/snap/window_manager.h"
 #include "module/wol/wakeup_manager.h"
 
@@ -42,7 +42,7 @@ bool ApplicationImpl::Start() {
   candidates.push_back(std::make_unique<ClipboardMonitor>());
   candidates.push_back(std::make_unique<WindowManager>());
   candidates.push_back(std::make_unique<PerformanceMonitor>());
-  candidates.push_back(std::make_unique<AudioDeviceManager>());
+  candidates.push_back(std::make_unique<ProfileManager>());
   candidates.push_back(std::make_unique<WakeupManager>());
 
   for (auto& module : candidates) {

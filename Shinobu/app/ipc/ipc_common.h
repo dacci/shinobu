@@ -12,7 +12,7 @@ enum class IpcMethods {
   kMonitorPerformance = 3000,
   kSleepOnLowLoad,
 
-  // AudioDeviceManager
+  // ProfileManager
 
   // WakeupManager
 };

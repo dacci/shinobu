@@ -336,6 +336,7 @@ BEGIN
     IDS_SECONDS             "秒"
     IDS_MINUTES             "分"
     IDS_HOURS               "時間"
+    IDS_POWER_SCHEME        "電源プラン(&O)"
 END
 
 #endif    // 日本語 (日本) resources
