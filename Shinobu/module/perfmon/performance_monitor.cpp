@@ -364,5 +364,10 @@ void PerformanceMonitor::OnMonitorPerformance(UINT /*notify_code*/, int /*id*/,
 
 void PerformanceMonitor::OnTrafficSleep(UINT /*notify_code*/, int /*id*/,
                                         CWindow /*control*/) {
-  sleep_ = !sleep_;
+  if (block_) {
+    sleep_ = !sleep_;
+  } else {
+    sleep_ = false;
+    SetSuspendState(FALSE, FALSE, FALSE);
+  }
 }
