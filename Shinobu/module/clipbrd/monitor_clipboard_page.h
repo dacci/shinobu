@@ -42,7 +42,7 @@ class MonitorClipboardPage : public CPropertyPageImpl<MonitorClipboardPage>,
 
   void OnFinalMessage(HWND hWnd) override;
   BOOL OnInitDialog(CWindow focus, LPARAM init_param);
-  BOOL OnApply();
+  int OnApply();
 
  private:
   static const int kMinRings = 1;

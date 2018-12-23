@@ -66,7 +66,7 @@ BOOL MonitorClipboardPage::OnInitDialog(CWindow /*focus*/,
   return TRUE;
 }
 
-BOOL MonitorClipboardPage::OnApply() {
+int MonitorClipboardPage::OnApply() {
   DoDataExchange(DDX_SAVE);
 
   auto preferences = application_->GetPreferences(clipbrd::kPreferenceName);
@@ -96,5 +96,5 @@ BOOL MonitorClipboardPage::OnApply() {
   preferences->PutInteger(clipbrd::kDeleteEntryKeyValue, key_code);
   preferences->PutInteger(clipbrd::kDeleteEntryModifiersValue, modifiers);
 
-  return TRUE;
+  return PSNRET_NOERROR;
 }

@@ -92,7 +92,7 @@ BOOL PerformanceMonitorPage::OnInitDialog(CWindow /*focus*/,
   return TRUE;
 }
 
-BOOL PerformanceMonitorPage::OnApply() {
+int PerformanceMonitorPage::OnApply() {
   DoDataExchange(DDX_SAVE);
 
   auto preferences = application_->GetPreferences(perfmon::kPreferenceName);
@@ -118,5 +118,5 @@ BOOL PerformanceMonitorPage::OnApply() {
   preferences->PutInteger(perfmon::kTrafficTimeUnitValue,
                           traffic_time_unit_.GetCurSel());
 
-  return TRUE;
+  return PSNRET_NOERROR;
 }

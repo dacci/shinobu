@@ -41,7 +41,7 @@ class WakeupTargetsPage : public CPropertyPageImpl<WakeupTargetsPage>,
   END_DDX_MAP()
 
   void OnFinalMessage(HWND hWnd) override;
-  BOOL OnApply();
+  int OnApply();
 
  private:
   BOOL OnInitDialog(CWindow /*focus*/, LPARAM /*init_param*/);

@@ -19,7 +19,7 @@ void WakeupTargetsPage::OnFinalMessage(HWND /*hWnd*/) {
   delete this;
 }
 
-BOOL WakeupTargetsPage::OnApply() {
+int WakeupTargetsPage::OnApply() {
   owner_->targets_.clear();
 
   for (auto i = 0, l = targets_.GetItemCount(); i < l; ++i) {
@@ -37,7 +37,7 @@ BOOL WakeupTargetsPage::OnApply() {
     owner_->targets_[std::wstring(name_)] = octet_string;
   }
 
-  return TRUE;
+  return PSNRET_NOERROR;
 }
 
 BOOL WakeupTargetsPage::OnInitDialog(CWindow /*focus*/, LPARAM /*init_param*/) {

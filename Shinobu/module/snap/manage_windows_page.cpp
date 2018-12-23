@@ -94,7 +94,7 @@ BOOL ManageWindowsPage::OnInitDialog(CWindow /*focus*/, LPARAM /*init_param*/) {
   return TRUE;
 }
 
-BOOL ManageWindowsPage::OnApply() {
+int ManageWindowsPage::OnApply() {
   DoDataExchange(DDX_SAVE);
 
   auto preferences = application_->GetPreferences(snap::kPreferenceName);
@@ -146,5 +146,5 @@ BOOL ManageWindowsPage::OnApply() {
   preferences->PutInteger(snap::kResizeKeyValue, key_code);
   preferences->PutInteger(snap::kResizeModifiersValue, modifiers);
 
-  return TRUE;
+  return PSNRET_NOERROR;
 }
