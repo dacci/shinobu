@@ -15,21 +15,11 @@ class PropertyDialogImpl : public CPropertySheetImpl<PropertyDialogImpl>,
                            public PropertyDialog {
  public:
   PropertyDialogImpl() : CPropertySheetImpl(IDR_SETTINGS_DIALOG) {
-    m_psh.dwFlags |= PSH_NOAPPLYNOW;
+    m_psh.dwFlags |= PSH_NOAPPLYNOW | PSH_NOCONTEXTHELP;
   }
 
   bool AddPage(const PROPSHEETPAGE& page) override {
     return CPropertySheetImpl::AddPage(&page) != FALSE;
-  }
-
-  static int CALLBACK PropSheetCallback(HWND hWnd, UINT message,
-                                        LPARAM lParam) {
-    if (message == PSCB_PRECREATE) {
-      auto dialog_template = reinterpret_cast<DLGTEMPLATE*>(lParam);
-      dialog_template->style &= ~DS_CONTEXTHELP;
-    }
-
-    return CPropertySheetImpl::PropSheetCallback(hWnd, message, lParam);
   }
 
  private:
