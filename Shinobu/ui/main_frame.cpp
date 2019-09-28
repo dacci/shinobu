@@ -177,7 +177,6 @@ LRESULT MainFrame::OnTaskbarCreated(UINT /*message*/, WPARAM /*wParam*/,
     Shell_NotifyIcon(NIM_SETFOCUS, &notify_icon_);
   } else {
     LOG(ERROR) << "Failed to add tray icon.";
-    PostMessage(WM_CLOSE);
   }
 
   return 0;
