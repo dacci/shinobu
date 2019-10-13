@@ -1,0 +1,2 @@
+*.rc        text eol=crlf
+resource.h  text eol=crlf
