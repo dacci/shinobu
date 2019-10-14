@@ -167,6 +167,7 @@ void PerformanceMonitor::PreparePropertyPage(PropertyDialog* parent) {
 void PerformanceMonitor::SetEnabled(bool enabled) {
   enabled_ = enabled;
   configured_enabled_ = enabled;
+  SaveSettings();
 
   if (!enabled)
     UnblockShutdown();
